@@ -1,0 +1,52 @@
+from openpyxl import Workbook, load_workbook
+from openpyxl.utils import get_column_letter
+from openpyxl.styles import Font
+
+data = {
+    "saeed":{"math":98,
+             "science":88,
+             "english":99,
+             "gym":90
+             },
+    "rehab":{"math":90,
+             "science":60,
+             "english":80,
+             "gym":55
+             },
+    "manal":{"math":70,
+             "science":99,
+             "english":50,
+             "gym":44
+             },
+    "mohamed":{"math":98,
+             "science":99,
+             "english":99,
+             "gym":99
+             },
+    "aly":{"math":98,
+             "science":30,
+             "english":65,
+             "gym":75
+             }
+        }
+wb = Workbook()
+ws = wb.active
+ws.title = 'Grades'
+
+headings = ['Names'] + list(data['saeed'].keys())
+ws.append(headings)
+
+for person in data:
+    grades = list(data[person].values())
+    ws.append([person] + grades)
+
+
+for col in range(2,len(data['saeed']) + 2):
+    char = get_column_letter(col)
+    ws[char + '7'] = f"=SUM({char+'2'}:{char + '6'})/{len(data)}"
+
+
+for col in range(1,6):
+    ws[get_column_letter(col) + '1'].font = Font(bold=True, color= "0099ccff")
+
+wb.save('newgrades.xlsx')
